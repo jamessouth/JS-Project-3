@@ -11,17 +11,24 @@ const colorSelectHeartOpts = document.querySelectorAll('#color option:nth-child(
 const activitiesFS = document.querySelector('.activities');
 const activitiesLabels = activitiesFS.querySelectorAll('label');
 const activitiesInputs = activitiesFS.querySelectorAll('input');
+const totalP = document.createElement('p');
+const payment = document.querySelector('#payment');
+const creditCard = document.querySelector('#credit-card');
+const payPal = document.querySelector('#paypal');
+const bitCoin = document.querySelector('#bitcoin');
 
 
 
 
-
-
-nameInput.focus();
+// nameInput.focus();
 otherInput.style.display = 'none';
 jobRoleSelect.value = 'full-stack js developer';
 tShirtDesign.value = 'Select Theme';
 colorSelect.value = 'Pick Color';
+payment.value = 'credit card';
+payPal.style.display = 'none';
+bitCoin.style.display = 'none';
+
 
 
 jobRoleSelect.addEventListener('change', function(e){
@@ -48,27 +55,62 @@ tShirtDesign.addEventListener('change', function(e){
 });
 
 activitiesFS.addEventListener('change', function(e){
+    let total = 0;
+    let inp = e.target;
+    let lab = e.target.parentNode.textContent;
+    // console.log(lab, inp);
+    let time = e.target.parentNode.textContent.match(/\w+(day).+(?=(, \$\d{3})$)/gi);
+    // console.log(time);
 
-    console.log(e.target.parentNode.textContent);
-    let act = e.target.parentNode.textContent.match(/\w+(day).+(?=(, \$\d{3})$)/gi);
-    console.log(act);
-    activitiesLabels.forEach((l) => {
+      activitiesLabels.forEach(l => {
+        if(time !== null){
+          if(l.textContent.includes(time[0]) && l.textContent !== lab){
+            if(inp.checked){
+              // console.log(l.textContent);
+              l.firstElementChild.setAttribute('disabled', '');
+              l.style.color = 'grey';
+              l.style.textDecoration = 'line-through wavy';
+              l.style.filter = 'blur(1px)';
+            } else {
+              l.firstElementChild.removeAttribute('disabled');
+              l.style.color = '#000';
+              l.style.textDecoration = 'none';
+              l.style.filter = 'none';
+            }
+          }
+        }
+        if (l.firstElementChild.checked) {
+          // console.log(l.textContent.match(/\d{3}$/)[0]);
+          total += parseInt(l.textContent.match(/\d{3}$/)[0], 10);
+          // console.log(total);
+        }
 
-      if (act !== null && l.textContent.includes(act[0] )) {
-        console.log(l.textContent);
+      })
+
+      if(total > 0){
+        totalP.textContent = `Total: $${total}`;
+        if(activitiesFS.lastElementChild.tagName === 'LABEL'){
+          activitiesFS.appendChild(totalP);
+        }
       } else {
-
+        activitiesFS.removeChild(activitiesFS.lastElementChild);
       }
-
-
-
-    })
-
 
 
 });
 
+payment.addEventListener('change', function(e){
+  [creditCard, payPal, bitCoin].forEach(p => {
+    // p.style.display = 'none';
+    // console.log(this.value[0], p.id[0]);
+    p.style.display = this.value[0] === p.id[0] ? 'block' : 'none';
 
+  });
+
+
+  // console.log(this.value);
+
+});
 
 
 
