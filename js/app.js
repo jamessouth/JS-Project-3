@@ -2,6 +2,7 @@ console.log('hello');
 
 
 const nameInput = document.querySelector('#name');
+const emailInput = document.querySelector('#mail');
 const otherInput = document.querySelector('#other-title');
 const jobRoleSelect = document.querySelector('#title');
 const tShirtDesign = document.querySelector('#design');
@@ -16,7 +17,7 @@ const payment = document.querySelector('#payment');
 const creditCard = document.querySelector('#credit-card');
 const payPal = document.querySelector('#paypal');
 const bitCoin = document.querySelector('#bitcoin');
-
+const button = document.querySelector('button');
 
 
 
@@ -28,6 +29,7 @@ colorSelect.value = 'Pick Color';
 payment.value = 'credit card';
 payPal.style.display = 'none';
 bitCoin.style.display = 'none';
+
 
 
 
@@ -108,12 +110,32 @@ payment.addEventListener('change', function(e){
   });
 
 
-  // console.log(this.value);
+});
 
+emailInput.addEventListener('input', function (e) {
+  console.log(e);
+  if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
+    this.style.border = '4px black dashed';
+  } else {
+    this.style.border = 'none';
+  }
 });
 
 
+button.addEventListener('click', function (e) {
+  console.log(e);
+  if(nameInput.value === ''){
+    e.preventDefault();
+  }
+  if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
+    e.preventDefault();
+  }
+  if(activitiesFS.lastElementChild.tagName === 'LABEL'){
+    e.preventDefault();
+  }
 
+
+});
 
 
 
