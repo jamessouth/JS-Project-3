@@ -7,6 +7,7 @@ const otherInput = document.querySelector('#other-title');
 const jobRoleSelect = document.querySelector('#title');
 const tShirtDesign = document.querySelector('#design');
 const colorSelect = document.querySelector('#color');
+const colorSelectDiv = document.querySelector('#colors-js-puns');
 const colorSelectPunsOpts = document.querySelectorAll('#color option:nth-child(-n+4):not(:first-child)');
 const colorSelectHeartOpts = document.querySelectorAll('#color option:nth-child(n+5)');
 const activitiesFS = document.querySelector('.activities');
@@ -18,6 +19,9 @@ const creditCard = document.querySelector('#credit-card');
 const payPal = document.querySelector('#paypal');
 const bitCoin = document.querySelector('#bitcoin');
 const button = document.querySelector('button');
+const ccNum = document.querySelector('#cc-num');
+const zip = document.querySelector('#zip');
+const cvv = document.querySelector('#cvv');
 
 
 
@@ -26,10 +30,11 @@ otherInput.style.display = 'none';
 jobRoleSelect.value = 'full-stack js developer';
 tShirtDesign.value = 'Select Theme';
 colorSelect.value = 'Pick Color';
+colorSelectDiv.style.display = 'none';
 payment.value = 'credit card';
 payPal.style.display = 'none';
 bitCoin.style.display = 'none';
-
+activitiesFS.tabIndex = '0';
 
 
 
@@ -44,6 +49,7 @@ jobRoleSelect.addEventListener('change', function(e){
 
 tShirtDesign.addEventListener('change', function(e){
   console.log(e);
+  colorSelectDiv.style.display = 'block';
   if(this.value === 'js puns'){
     colorSelectPunsOpts.forEach(o => o.removeAttribute('hidden'));
     colorSelectHeartOpts.forEach(o => o.setAttribute('hidden', ''));
@@ -113,25 +119,125 @@ payment.addEventListener('change', function(e){
 });
 
 emailInput.addEventListener('input', function (e) {
+  // this.classList.add('email');
   console.log(e);
-  if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
-    this.style.border = '4px black dashed';
-  } else {
-    this.style.border = 'none';
-  }
+  // if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
+  //
+  // } else {
+  //   // this.classList.remove('email');
+  // }
 });
+
+function makeSpan(field, label){
+  let lab = field.previousElementSibling;
+  if(!!lab.firstElementChild){
+    lab.removeChild(lab.firstElementChild);
+  }
+  let span = document.createElement('span');
+
+
+  switch (label){
+    case 'Name':
+      span.textContent = ` format ${label} as "firstname lastname", with no numbers`;
+      break;
+    case 'Email':
+      span.textContent = ` format ${label} as "myEmail@myDomain.com"`;
+      break;
+    case 'Card Number':
+      span.textContent = ` format ${label} as a number with 13 to 16 digits`;
+      break;
+    case 'Zip Code':
+      span.textContent = ` format ${label} as a number with 5 digits`;
+      break;
+    case 'CVV':
+      span.textContent = ` format ${label} as a number with 3 digits`;
+      break;
+
+  }
+
+
+  lab.appendChild(span);
+}
+
+
+
+function errorMsg(field, label){
+
+field.classList.add('failed');
+
+
+
+    if(field.value === ''){
+      field.setAttribute('placeholder', `${label} cannot be empty.`);
+    } else {
+      makeSpan(field, label);
+    }
+
+
+
+
+}
 
 
 button.addEventListener('click', function (e) {
   console.log(e);
-  if(nameInput.value === ''){
-    e.preventDefault();
+
+
+
+  if (payment.value === 'credit card') {
+
+
+    if (!/^\d{3}$/.test(cvv.value)) {
+      e.preventDefault();
+      creditCard.scrollIntoView();
+      cvv.focus();
+      errorMsg(cvv, 'CVV');
+    }
+    if (!/^\d{5}$/.test(zip.value)) {
+      e.preventDefault();
+      creditCard.scrollIntoView();
+      zip.focus();
+      errorMsg(zip, 'Zip Code');
+    }
+    if (!/^\d{13,16}$/.test(ccNum.value)) {
+      e.preventDefault();
+      creditCard.scrollIntoView();
+      ccNum.focus();
+      errorMsg(ccNum, 'Card Number');
+    }
+
   }
-  if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
-    e.preventDefault();
-  }
+
   if(activitiesFS.lastElementChild.tagName === 'LABEL'){
     e.preventDefault();
+    activitiesFS.scrollIntoView();
+    activitiesFS.children[1].firstElementChild.focus();
+
+
+    let leg = activitiesFS.firstElementChild;
+    if(!!leg.firstElementChild){
+      leg.removeChild(leg.firstElementChild);
+    }
+    let span = document.createElement('span');
+    span.textContent = ` please select at least one activity`;
+    leg.appendChild(span);
+  }
+
+
+  if(emailInput.value === '' || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
+    e.preventDefault();
+    emailInput.scrollIntoView();
+    window.scrollByLines(-3);
+    emailInput.focus();
+    errorMsg(emailInput, 'Email');
+  }
+
+  if(nameInput.value === '' || !/^[a-zA-Z]+[-']?[a-zA-Z]* [a-zA-Z]*(?:[-']?[a-zA-Z-'][ ]?)*[a-zA-Z]$/.test(nameInput.value)){
+    e.preventDefault();
+    nameInput.scrollIntoView();
+    window.scrollByLines(-3);
+    nameInput.focus();
+    errorMsg(nameInput, 'Name');
   }
 
 
