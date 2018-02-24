@@ -16,6 +16,7 @@ body {
   font: 1em/1.5;
   color: #184f68;
 	background: #accbd9;
+  position: relative;
 }
 
 header {
@@ -94,6 +95,29 @@ input:focus {
 	background: #fff;
 	border-color: #5e97b0;
 	transition: border-color .4s, background-color .4s;
+}
+
+.modal{
+  min-width: 250px;
+  position: absolute;
+  z-index: 33;
+  background-color: #ffff50;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+
+}
+.invalid{
+  box-shadow: 13px 13px 10px #ec250d;
+}
+.valid{
+  box-shadow: 13px 13px 10px #149611;
+}
+
+.modal p{
+  text-align: center;
+  color: black;
+  padding: 5px;
 }
 
 .failed{

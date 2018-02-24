@@ -1,6 +1,3 @@
-console.log('hello');
-
-
 const nameInput = document.querySelector('#name');
 const emailInput = document.querySelector('#mail');
 const otherInput = document.querySelector('#other-title');
@@ -22,8 +19,10 @@ const button = document.querySelector('button');
 const ccNum = document.querySelector('#cc-num');
 const zip = document.querySelector('#zip');
 const cvv = document.querySelector('#cvv');
-
-
+const ccMsgDiv = document.createElement('div');
+const zpMsgDiv = document.createElement('div');
+const cvvMsgDiv = document.createElement('div');
+const pmtFS = document.querySelector('fieldset:last-of-type');
 
 // nameInput.focus();
 otherInput.style.display = 'none';
@@ -34,7 +33,9 @@ colorSelectDiv.style.display = 'none';
 payment.value = 'credit card';
 payPal.style.display = 'none';
 bitCoin.style.display = 'none';
-activitiesFS.tabIndex = '0';
+pmtFS.insertBefore(ccMsgDiv, creditCard);
+pmtFS.insertBefore(zpMsgDiv, creditCard);
+pmtFS.insertBefore(cvvMsgDiv, creditCard);
 
 
 
@@ -118,21 +119,121 @@ payment.addEventListener('change', function(e){
 
 });
 
-emailInput.addEventListener('input', function (e) {
-  // this.classList.add('email');
-  console.log(e);
-  // if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
-  //
+let modal = document.createElement('div');
+let text = document.createElement('p');
+modal.className = 'modal invalid';
+modal.appendChild(text);
+
+
+function realTimeValidator(e){
+  // if(this === document.activeElement){
+  //   document.body.appendChild(modal);
   // } else {
-  //   // this.classList.remove('email');
+  //   document.body.removeChild(modal);
   // }
+
+  modal.style.top = `${this.offsetTop - this.offsetHeight * 1.6}px`;
+
+  if(this.value === ''){
+    console.log(e);
+    text.textContent = 'Cannot be blank';
+    modal.className = 'modal invalid';
+  } else {
+
+    console.log(this.id);
+
+    switch (this.id){
+      case 'name':
+        // text.textContent = ` format ${this.id} as "firstname lastname", with no numbers`;
+        if(/\d+/.test(this.value)){
+          text.textContent = 'Name cannot contain numbers';
+          modal.className = 'modal invalid';
+        } else if(!/^[a-zA-Z]+[-']?[a-zA-Z]* [a-zA-Z]*(?:[-']?[a-zA-Z-'][ ]?)*[a-zA-Z]$/.test(this.value)){
+          text.textContent = 'Name must include a first name, a space, and a last name';
+          modal.className = 'modal invalid';
+        } else {
+          text.textContent = 'Looks valid to me!';
+          modal.className = 'modal valid';
+        }
+        break;
+      case 'mail':
+        // text.textContent = ` format ${this.id} as "myEmail@myDomain.com"`;
+        if(/ +/.test(this.value)){
+          text.textContent = 'Email address cannot contain any spaces';
+          modal.className = 'modal invalid';
+        } else if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(this.value)){
+          text.textContent = 'Format as myEmail@myDomain.com';
+          modal.className = 'modal invalid';
+        } else {
+          text.textContent = 'Looks valid to me!';
+          modal.className = 'modal valid';
+        }
+
+        break;
+      case 'cc-num':
+        // text.textContent = ` format ${this.id} as a number with 13 to 16 digits`;
+        if(/\D+/.test(this.value)){
+          text.textContent = 'Card number can only contain numbers';
+          modal.className = 'modal invalid';
+        } else if(!/^.{13,16}$/.test(this.value)){
+          text.textContent = 'Card number must be at least 13 and no more than 16 digits long';
+          modal.className = 'modal invalid';
+        } else {
+          text.textContent = 'Looks valid to me!';
+          modal.className = 'modal valid';
+        }
+
+        break;
+      case 'zip':
+        if(/\D+/.test(this.value)){
+          text.textContent = 'Zip code can only contain numbers';
+          modal.className = 'modal invalid';
+        } else if(!/^.{5}$/.test(this.value)){
+          text.textContent = 'Zip code must be 5 digits long';
+          modal.className = 'modal invalid';
+        } else {
+          text.textContent = 'Looks valid to me!';
+          modal.className = 'modal valid';
+        }
+        break;
+      case 'cvv':
+        if(/\D+/.test(this.value)){
+          text.textContent = 'CVV can only contain numbers';
+          modal.className = 'modal invalid';
+        } else if(!/^.{3}$/.test(this.value)){
+          text.textContent = 'CVV must be 3 digits long';
+          modal.className = 'modal invalid';
+        } else {
+          text.textContent = 'Looks valid to me!';
+          modal.className = 'modal valid';
+        }
+        break;
+
+    }
+
+  }
+  document.body.appendChild(modal);
+
+}
+
+[nameInput, emailInput, ccNum, zip, cvv].forEach(x => {
+  x.addEventListener('input', realTimeValidator);
 });
 
+[nameInput, emailInput, ccNum, zip, cvv].forEach(x => {
+  x.addEventListener('blur', e => {
+    console.log(e);
+    if(document.body.lastElementChild.classList.contains('modal')){
+      console.log('has modal');
+      document.body.removeChild(document.body.lastElementChild);
+    }
+  });
+});
+
+
+
 function makeSpan(field, label){
-  let lab = field.previousElementSibling;
-  if(!!lab.firstElementChild){
-    lab.removeChild(lab.firstElementChild);
-  }
+
   let span = document.createElement('span');
 
 
@@ -155,37 +256,40 @@ function makeSpan(field, label){
 
   }
 
+  if(window.innerWidth < 680 || ['Name', 'Email'].includes(label)){
+    let lab = field.previousElementSibling;
+    if(!!lab.firstElementChild){
+      lab.removeChild(lab.firstElementChild);
+    }
+    lab.appendChild(span);
+  } else {
+    // if(['Card Number', 'Zip Code', 'CVV'].includes(label)){
+    // let lab = field.previousElementSibling;
+    if(ccMsgDiv.children.length > 2){
+      lab.removeChild(lab.firstElementChild);
+    }
+    lab.appendChild(span);
 
-  lab.appendChild(span);
+
+    // }
+  }
 }
 
 
 
 function errorMsg(field, label){
-
-field.classList.add('failed');
-
-
-
-    if(field.value === ''){
-      field.setAttribute('placeholder', `${label} cannot be empty.`);
-    } else {
-      makeSpan(field, label);
-    }
-
-
-
-
+  field.classList.add('failed');
+  if(field.value === ''){
+    field.setAttribute('placeholder', `${label} cannot be empty.`);
+  } else {
+    makeSpan(field, label);
+  }
 }
 
 
 button.addEventListener('click', function (e) {
   console.log(e);
-
-
-
   if (payment.value === 'credit card') {
-
 
     if (!/^\d{3}$/.test(cvv.value)) {
       e.preventDefault();
