@@ -1,87 +1,71 @@
 /* =================================
   Base Element Styles
 ==================================== */
-
 * {
   box-sizing: border-box;
 }
-
 body,
 input,
 button {
  font-family: 'Roboto', sans-serif;
 }
-
 body {
   font: 1em/1.5;
   color: #184f68;
 	background: #accbd9;
   position: relative;
 }
-
 header {
 	text-align: center;
 }
-
 h1 {
 	font-size: 2.5em;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 	margin: 0;
 }
-
 a {
   text-decoration: none;
 }
-
 /* =================================
   Form Element Styles
 ==================================== */
-
 form {
 	padding: .875em 1.875em 1.875em;
 	background: #85b5ca;
 }
-
 fieldset,
 legend,
 button {
 	padding: 0;
 	border: none;
 }
-
 fieldset {
 	margin-top: 1.5em;
 }
-
 legend,
 button {
 	font-size: 1.25em;
 }
-
 legend {
 	font-weight: 500;
 	padding-top: .5em;
 	border-top: 2px solid #679cb3;
 	margin-bottom: 1.125em;
 }
-
 input[type="text"],
 input[type="email"],
 legend {
 	width: 100%;
 }
-
 label {
 	color: #000;
 	display: block;
 	margin-bottom: .5em;
 }
-
 input,
 select {
 	margin-bottom: 1.125em;
 }
-
 input {
 	font-size: 1em;
 	font-weight: 500;
@@ -90,75 +74,51 @@ input {
 	border: 2px solid #c1deeb;
 	outline: none;
 }
-
 input:focus {
 	background: #fff;
 	border-color: #5e97b0;
 	transition: border-color .4s, background-color .4s;
 }
-
 .modal{
   min-width: 250px;
   position: absolute;
   z-index: 33;
-  background-color: #ffff50;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 10px;
-
 }
 .invalid{
-  box-shadow: 13px 13px 10px #ec250d;
+  background-color: #ec250d;
 }
 .valid{
-  box-shadow: 13px 13px 10px #149611;
+  background-color: #149611;
 }
-
 .modal p{
   text-align: center;
   color: black;
   padding: 5px;
 }
-
-.failed{
-
-}
-
 .failed:focus{
-  border: 4px solid red;
+  background-color: red;
 }
-
 :invalid{
   box-shadow: none;
 }
 :-moz-submit-invalid {
   box-shadow: none;
 }
-
 :-moz-ui-invalid {
   box-shadow: none;
 }
-
 label > span,
 legend > span{
   color: black;
   background-color: red;
-  font-size: 18px;
 }
-
-
-.email:invalid{
-  background-color: red;
-}
-.email:valid{
-  background-color: green;
-}
-
 input[type="checkbox"],
 input[type="radio"] {
 	display: inline-block;
 }
-
 button {
 	color: #fff;
 	padding: .55em 1.25em;
@@ -166,51 +126,40 @@ button {
 	margin: 1.25em 0 .5em;
 	cursor: pointer;
 }
-
 button:hover {
 	background: #184c62;
 }
-
 /* =================================
   Page Styles
 ==================================== */
-
 .container {
 	margin: auto;
 	max-width: 680px;
 }
-
 .shirt div {
 	float: left;
 	margin-right: .85em;
 }
-
 .interests input {
 	margin-bottom: 0;
 }
-
 .credit-card {
 	margin-top: 1.25em;
 }
-
 /* =================================
   Helper Classes
 ==================================== */
-
 .is-hidden {
 	display: none;
 }
-
 .clearfix::after {
   content: " ";
   display: table;
   clear: both;
 }
-
 /* =================================
   Media Queries
 ==================================== */
-
 @media (min-width: 0) and (max-width: 679px) {
 	header {
 		padding: 2em 0;
@@ -219,7 +168,6 @@ button:hover {
 		width: 100%;
 	}
 }
-
 @media (min-width: 680px) {
 	header {
 		padding: 4.65em 0 2.5em;
