@@ -20,6 +20,8 @@ const zip = document.querySelector('#zip');
 const cvv = document.querySelector('#cvv');
 let modal = document.createElement('div');
 let text = document.createElement('p');
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;//this is from the spec for email inputs
+const nameRegex = /^[a-zA-Z]+[-']?[a-zA-Z]* [a-zA-Z]*(?:[-']?[a-zA-Z-'][ ]?)*[a-zA-Z]$/;
 
 nameInput.focus();
 otherInput.style.display = 'none';
@@ -66,13 +68,9 @@ activitiesFS.addEventListener('change', function(e){
             if(inp.checked){
               l.firstElementChild.setAttribute('disabled', '');
               l.style.color = 'grey';
-              l.style.textDecoration = 'line-through wavy';
-              l.style.filter = 'blur(1px)';
             } else {
               l.firstElementChild.removeAttribute('disabled');
               l.style.color = '#000';
-              l.style.textDecoration = 'none';
-              l.style.filter = 'none';
             }
           }
         }
@@ -120,7 +118,7 @@ function realTimeValidator(e){
         if(/\d+/.test(this.value)){
           text.textContent = 'Name cannot contain numbers';
           modal.className = 'modal invalid';
-        } else if(!/^[a-zA-Z]+[-']?[a-zA-Z]* [a-zA-Z]*(?:[-']?[a-zA-Z-'][ ]?)*[a-zA-Z]$/.test(this.value)){
+        } else if(!nameRegex.test(this.value)){
           text.textContent = 'Name must include a first name, a space, and a last name';
           modal.className = 'modal invalid';
         } else {
@@ -132,7 +130,7 @@ function realTimeValidator(e){
         if(/ +/.test(this.value)){
           text.textContent = 'Email address cannot contain any spaces';
           modal.className = 'modal invalid';
-        } else if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(this.value)){
+        } else if(!emailRegex.test(this.value)){
           text.textContent = 'Format as myEmail@myDomain.com';
           modal.className = 'modal invalid';
         } else {
@@ -264,10 +262,10 @@ button.addEventListener('click', function (e) {
     span.textContent = ` please select at least one activity`;
     leg.appendChild(span);
   }
-  if(emailInput.value === '' || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value)){
+  if(emailInput.value === '' || !emailRegex.test(emailInput.value)){
     postError(e, emailInput, 'Email', false);
   }
-  if(nameInput.value === '' || !/^[a-zA-Z]+[-']?[a-zA-Z]* [a-zA-Z]*(?:[-']?[a-zA-Z-'][ ]?)*[a-zA-Z]$/.test(nameInput.value)){
+  if(nameInput.value === '' || !nameRegex.test(nameInput.value)){
     postError(e, nameInput, 'Name', false);
   }
 });
